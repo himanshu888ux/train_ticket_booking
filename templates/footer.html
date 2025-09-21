@@ -1,0 +1,99 @@
+        <!-- Footer -->
+        <footer class="footer mt-auto" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;">
+        <div class="container pt-5 pb-4">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="text-white mb-4"><i class="fas fa-train me-2"></i> RailBook</h5>
+                    <p class="mb-4">India's leading railway ticket booking platform, serving millions of customers with reliability and trust since 2010.</p>
+                    <div class="social-icons mb-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <div class="app-download">
+                        <p class="mb-2">Download Our App</p>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-outline-light btn-sm"><i class="fab fa-google-play me-1"></i> Play Store</a>
+                            <a href="#" class="btn btn-outline-light btn-sm"><i class="fab fa-apple me-1"></i> App Store</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('index') }}" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-angle-right me-1"></i> Home</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-angle-right me-1"></i> Book Tickets</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-angle-right me-1"></i> Cancel Tickets</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-angle-right me-1"></i> Train Schedules</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-angle-right me-1"></i> PNR Status</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-3 mb-4">
+                    <h5>Top Routes</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-route me-1"></i> Mumbai to Delhi</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-route me-1"></i> Bangalore to Chennai</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-route me-1"></i> Kolkata to Patna</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-route me-1"></i> Hyderabad to Bangalore</a></li>
+                        <li class="mb-2"><a href="#" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;"><i class="fas fa-route me-1"></i> Ahmedabad to Mumbai</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="me-3 mt-1">
+                                    <i class="fas fa-map-marker-alt" style="color: var(--accent);"></i>
+                                </div>
+                                <div>123 Railway Nagar, Mumbai, Maharashtra, India - 400001</div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="me-3 mt-1">
+                                    <i class="fas fa-phone" style="color: var(--accent);"></i>
+                                </div>
+                                <div>
+                                    <a href="tel:+919876543210" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">+91 98765 43210</a><br>
+                                    <small class="text-muted">Mon-Sun: 7:00 AM - 11:00 PM</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="me-3 mt-1">
+                                    <i class="fas fa-envelope" style="color: var(--accent);"></i>
+                                </div>
+                                <div>
+                                    <a href="mailto:support@railbook.com" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">support@railbook.com</a><br>
+                                    <a href="mailto:bookings@railbook.com" style="color: rgba(255, 255, 255, 0.8); text-decoration: none;">bookings@railbook.com</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <p class="mb-0">&copy; 2023 RailBook - Railway Ticket Booking System. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="payment-methods">
+                        <span class="me-2">We Accept:</span>
+                        <i class="fab fa-cc-visa me-2"></i>
+                        <i class="fab fa-cc-mastercard me-2"></i>
+                        <i class="fab fa-cc-amex me-2"></i>
+                        <i class="fab fa-cc-paypal me-2"></i>
+                        <i class="fab fa-cc-apple-pay"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    </body>
+    </html>

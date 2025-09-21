@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Ticket Booking System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #ff6f00;
+            --light: #f5f5f5;
+            --dark: #212121;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, #f8f9fa, transparent);
+            z-index: 1;
+        }
+
+        .search-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-top: -80px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.15);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            height: 100%;
+            border-top: 4px solid var(--primary);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: inline-block;
+            padding: 20px;
+            border-radius: 50%;
+            background: rgba(26, 35, 126, 0.1);
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        .train-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .train-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .train-image {
+            height: 180px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .train-details {
+            padding: 20px;
+        }
+
+        .train-number {
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .train-route {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--dark);
+        }
+
+        .train-timing {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .train-price {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+
+        .offer-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(255, 111, 0, 0.3);
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 70px 0;
+            margin: 70px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .testimonial-card:after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 5rem;
+            color: rgba(26, 35, 126, 0.1);
+            font-family: Arial;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 3px solid var(--primary);
+        }
+
+        .newsletter-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 70px 0;
+            border-radius: 15px;
+            margin: 70px 0;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 0;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .search-form {
+                padding: 20px;
+                margin-top: -40px;
+            }
+
+            .feature-card {
+                margin-bottom: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'header.html' %}
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        {% if user %}
+                        <h1 class="display-4 fw-bold mb-4">Welcome back, {{ user }}!</h1>
+                        <p class="lead mb-5">Ready for your next journey? Book your train tickets in just 2 minutes.</p>
+                        {% else %}
+                        <h1 class="display-4 fw-bold mb-4">Book Train Tickets in Just 2 Minutes</h1>
+                        <p class="lead mb-5">India's largest railway booking platform. Safe, secure and trusted by
+                            millions of passengers.</p>
+                        {% endif %}
+                        <a href="#booking" class="btn btn-primary btn-lg"><i class="fas fa-ticket-alt me-2"></i> Book
+                            Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Form -->
+        <section id="booking" class="booking-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="search-form">
+                            <h3 class="mb-4 text-center"><i class="fas fa-search me-2"></i> Search Trains</h3>
+                            <form action="{{ url_for('search_trains') }}" method="POST">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">From Station</label>
+                                        <input type="text" name="source" class="form-control"
+                                            placeholder="Departure station" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">To Station</label>
+                                        <input type="text" name="destination" class="form-control"
+                                            placeholder="Arrival station" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Journey Date</label>
+                                        <input type="date" name="date" class="form-control" required
+                                            min="{{ current_date() }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Class</label>
+                                        <select name="class" class="form-select">
+                                            <option value="">All Classes</option>
+                                            <option value="1A">First Class AC (1A)</option>
+                                            <option value="2A">Second AC (2A)</option>
+                                            <option value="3A">Third AC (3A)</option>
+                                            <option value="SL">Sleeper (SL)</option>
+                                            <option value="CC">Chair Car (CC)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button type="submit" class="btn btn-primary btn-lg"><i
+                                            class="fas fa-train me-2"></i> Search Trains</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-5">
+            <div class="container">
+                <h2 class="section-title">Why Book With Us?</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4>Safe & Secure</h4>
+                            <p>Your transactions are secure with our advanced encryption technology. We prioritize your
+                                privacy and security.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <h4>Instant Confirmation</h4>
+                            <p>Get instant confirmation and live PNR status updates. Receive your tickets directly via
+                                email and SMS.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h4>24/7 Support</h4>
+                            <p>Our customer support team is available round the clock to assist you with any queries or
+                                issues.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-6 mb-4 mb-md-0">
+                        <div class="stat-item">
+                            <div class="stat-number">5M+</div>
+                            <div class="stat-label">Happy Customers</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-4 mb-md-0">
+                        <div class="stat-item">
+                            <div class="stat-number">15K+</div>
+                            <div class="stat-label">Daily Bookings</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-label">Cities Covered</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Customer Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Trains -->
+        <!-- Popular Trains -->
+        <section class="py-5">
+            <div class="container">
+                <h2 class="section-title">Popular Trains</h2>
+                <div class="row">
+                    {% if popular_trains and popular_trains|length > 0 %}
+                    {% for train in popular_trains %}
+                    <div class="col-md-4 mb-4">
+                        <div class="train-card">
+                            <div class="position-relative">
+                                <!-- Default train image -->
+                                <img src="https://images.unsplash.com/photo-1590172205846-793b31c6be87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                                    class="train-image" alt="{{ train.train_name }}">
+
+                                <!-- Badge based on availability -->
+                                {% if train.available_seats > 200 %}
+                                <div class="offer-badge">Available</div>
+                                {% elif train.available_seats > 100 %}
+                                <div class="offer-badge">Limited</div>
+                                {% else %}
+                                <div class="offer-badge">Few Left</div>
+                                {% endif %}
+                            </div>
+                            <div class="train-details">
+                                <div class="train-number">{{ train.train_number }} | {{ train.train_name }}</div>
+                                <div class="train-route">{{ train.source_station }} - {{ train.destination_station }}
+                                </div>
+                                <div class="train-timing">
+                                    <div><i class="far fa-clock me-1"></i> Depart: {{ train.departure_time }} | Arrive:
+                                        {{ train.arrival_time }}</div>
+                                    <div><i class="fas fa-bolt me-1"></i> Duration: {{ train.duration }}</div>
+                                    <div><i class="fas fa-chair me-1"></i> Available Seats: {{ train.available_seats }}
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="train-price">₹{{ train.fare }}</div>
+                                    {% if session.user_id %}
+                                    <a href="{{ url_for('book_ticket', train_id=train.id) }}"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="fas fa-ticket-alt me-1"></i> Book Now
+                                    </a>
+                                    {% else %}
+                                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-sign-in-alt me-1"></i> Login to Book
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-12 text-center">
+                        <div class="alert alert-info">
+                            <h4 class="alert-heading">No trains available at the moment</h4>
+                            <p>Please check back later or contact support for more information.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('all_trains') }}" class="btn btn-outline-primary">
+                        View All Trains <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- Testimonials -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <h2 class="section-title">What Our Customers Say</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">
+                                "The booking process was incredibly smooth. I got my tickets instantly and the customer
+                                support was helpful when I had a query. Great service!"
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer"
+                                    class="author-avatar">
+                                <div>
+                                    <h6 class="mb-0">Rahul Sharma</h6>
+                                    <small class="text-muted">Regular User</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">
+                                "I've been using RailBook for all my train travels. The interface is user-friendly and
+                                the booking confirmation is instant. Highly recommended!"
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Customer"
+                                    class="author-avatar">
+                                <div>
+                                    <h6 class="mb-0">Priya Patel</h6>
+                                    <small class="text-muted">Frequent Traveler</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="testimonial-card">
+                            <div class="testimonial-text">
+                                "The mobile app is fantastic! I can book tickets on the go and the live tracking feature
+                                helps me plan my arrival at the station perfectly."
+                            </div>
+                            <div class="testimonial-author">
+                                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Customer"
+                                    class="author-avatar">
+                                <div>
+                                    <h6 class="mb-0">Amit Kumar</h6>
+                                    <small class="text-muted">Business Traveler</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter -->
+        <section class="newsletter-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <h2 class="mb-4">Stay Updated with RailBook</h2>
+                        <p class="lead mb-4">Subscribe to our newsletter for exclusive offers, new features, and travel
+                            tips.</p>
+                        <form class="row g-3 justify-content-center">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="email" class="form-control form-control-lg"
+                                        placeholder="Your email address">
+                                    <button class="btn btn-light btn-lg" type="submit">Subscribe</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap Bundle JS -->
+  
+    <!-- Set minimum date to today -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateInput = document.querySelector('input[type="date"]');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+                dateInput.value = today;
+            }
+        });
+    </script>
+</body>
+
+</html>

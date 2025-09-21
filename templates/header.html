@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Booking System</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #ff6f00;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 12px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-brand i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin: 0 5px;
+            padding: 8px 15px !important;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white !important;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 8px 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-outline-light {
+            border-radius: 8px;
+            padding: 6px 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .notification-badge {
+            position: relative;
+        }
+        
+        .notification-badge::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+        
+        .user-dropdown {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: none !important;
+            color: white !important;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-dropdown:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        .user-name {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(26, 35, 126, 0.1);
+        }
+        
+        .dropdown-item.logout:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        @media (max-width: 992px) {
+            .navbar-nav {
+                padding: 15px 0;
+            }
+            
+            .nav-link {
+                margin: 5px 0;
+            }
+            
+            .btn-outline-light {
+                margin-top: 10px;
+                margin-left: 5px;
+            }
+            
+            .user-name {
+                max-width: 100%;
+            }
+            
+            .dropdown-menu {
+                border: none;
+                background-color: rgba(255, 255, 255, 0.95);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('index') }}">
+                    <i class="fas fa-train"></i> RailBook
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {{ 'active' if request.endpoint == 'index' }}" href="{{ url_for('index') }}">
+                                <i class="fas fa-home me-1"></i> Home
+                            </a>
+                        </li>
+                        {% if session.get('user_id') %}
+                        <li class="nav-item">
+                            <a class="nav-link {{ 'active' if request.endpoint == 'my_bookings' }}" href="{{ url_for('my_bookings') }}">
+                                <i class="fas fa-ticket-alt me-1"></i> My Bookings
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link {{ 'active' if request.endpoint == 'contact_us' }}" href="{{ url_for('contact_us') }}">
+                                <i class="fas fa-phone-alt me-1"></i> Contact
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ 'active' if request.endpoint == 'about' }}" href="{{ url_for('about') }}">
+                                <i class="fas fa-info-circle me-1"></i> About
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ 'active' if request.endpoint == 'chat_support' }}" href="{{ url_for('chat_support') }}">
+                                <i class="fas fa-comments me-1"></i> Chat Support
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        {% if session.get('user_id') %}
+                        <li class="nav-item">
+                            <a class="nav-link notification-badge" href="#">
+                                <i class="fas fa-bell"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle user-dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i> 
+                                <span class="user-name">{{ session.get('name', 'User') }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('profile') }}">
+                                        <i class="fas fa-user me-2"></i> My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('my_bookings') }}">
+                                        <i class="fas fa-ticket-alt me-2"></i> My Bookings
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item logout" href="{{ url_for('logout') }}">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{{ url_for('login') }}" class="btn btn-outline-light">
+                                <i class="fas fa-sign-in-alt me-1"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <a href="{{ url_for('signup') }}" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-1"></i> Sign Up
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Bootstrap Bundle JS (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Highlight active link based on current path
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Ticket - Railway Booking System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        
+        .train-info {
+            border-left: 4px solid var(--primary);
+            background-color: #f8f9ff;
+        }
+        
+        .passenger-form {
+            border-top: 1px solid #dee2e6;
+            padding-top: 20px;
+        }
+        
+        .alert {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+   {% include 'header.html' %}
+   
+    <!-- Booking Form -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="booking-card p-4">
+                    <h2 class="mb-4">Book Your Ticket</h2>
+                    
+                    <!-- Train Information -->
+                    <div class="train-info p-4 mb-4">
+                        <h4>{{ train.train_name }} ({{ train.train_number }})</h4>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>From:</strong> {{ train.source_station }}</p>
+                                <p><strong>To:</strong> {{ train.destination_station }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Departure:</strong> {{ train.departure_time }}</p>
+                                <p><strong>Arrival:</strong> {{ train.arrival_time }}</p>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <p class="mb-1"><strong>Available Seats:</strong> {{ train.available_seats }}</p>
+                            <p class="mb-0"><strong>Fare per person:</strong> ₹{{ train.fare }}</p>
+                        </div>
+                    </div>
+                    
+                    <form action="{{ url_for('book_ticket', train_id=train.id) }}" method="POST">
+                        <!-- Journey Date -->
+                        <div class="mb-4">
+                            <label for="journey_date" class="form-label"><strong>Journey Date</strong></label>
+                            <input type="date" class="form-control" id="journey_date" name="journey_date" required>
+                        </div>
+                        
+                        <!-- Passenger Count -->
+                        <div class="mb-4">
+                            <label for="passenger_count" class="form-label"><strong>Number of Passengers</strong></label>
+                            <select class="form-select" id="passenger_count" name="passenger_count" required>
+                                <option value="1">1 Passenger</option>
+                                <option value="2">2 Passengers</option>
+                                <option value="3">3 Passengers</option>
+                                <option value="4">4 Passengers</option>
+                                <option value="5">5 Passengers</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Passenger Details -->
+                        <div class="passenger-form">
+                            <h4 class="mb-3">Passenger Details</h4>
+                            <div id="passenger_fields">
+                                <!-- Passenger fields will be added here by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <!-- Fare Summary -->
+                        <div class="mt-4 p-3 bg-light rounded">
+                            <h5>Fare Summary</h5>
+                            <div class="d-flex justify-content-between">
+                                <span>Base Fare (x <span id="passenger_count_display">1</span>):</span>
+                                <span>₹<span id="total_fare">{{ train.fare }}</span></span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between fw-bold">
+                                <span>Total Amount:</span>
+                                <span>₹<span id="final_total">{{ train.fare }}</span></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-check-circle me-2"></i>Confirm Booking
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   {% include 'footer.html' %}
+    <!-- JavaScript for dynamic passenger fields -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passengerCount = document.getElementById('passenger_count');
+            const passengerFields = document.getElementById('passenger_fields');
+            const totalFare = document.getElementById('total_fare');
+            const finalTotal = document.getElementById('final_total');
+            const passengerCountDisplay = document.getElementById('passenger_count_display');
+            const baseFare = {{ train.fare }};
+            
+            // Function to update passenger fields
+            function updatePassengerFields() {
+                const count = parseInt(passengerCount.value);
+                passengerFields.innerHTML = '';
+                passengerCountDisplay.textContent = count;
+                
+                for (let i = 1; i <= count; i++) {
+                    const passengerDiv = document.createElement('div');
+                    passengerDiv.className = 'passenger-details mb-4 p-3 border rounded';
+                    passengerDiv.innerHTML = `
+                        <h5 class="mb-3">Passenger ${i}</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="passenger_name_${i}" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Age</label>
+                                <input type="number" class="form-control" name="passenger_age_${i}" min="1" max="100" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Gender</label>
+                                <select class="form-select" name="passenger_gender_${i}" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                    passengerFields.appendChild(passengerDiv);
+                }
+                
+                // Update fare
+                const total = baseFare * count;
+                totalFare.textContent = total;
+                finalTotal.textContent = total;
+            }
+            
+            // Initial update
+            updatePassengerFields();
+            
+            // Update on change
+            passengerCount.addEventListener('change', updatePassengerFields);
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('journey_date').setAttribute('min', today);
+        });
+    </script>
+</body>
+</html>

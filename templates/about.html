@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - RailBook</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #ff6f00;
+            --light: #f5f5f5;
+            --dark: #212121;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* 3D Animations */
+        .card-3d {
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            border: none;
+            border-radius: 15px;
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(50, 50, 93, 0.15), 0 15px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        
+        .rotate-3d {
+            transform: perspective(1000px) rotateY(15deg);
+            transition: transform 0.7s ease;
+        }
+        
+        .rotate-3d:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        
+        /* Header Styles */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+        }
+        
+        .navbar-brand i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            margin-bottom: 60px;
+            position: relative;
+            text-align: center;
+        }
+        
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Section Styles */
+        .section-title {
+            position: relative;
+            margin-bottom: 50px;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 5px;
+            background: var(--accent);
+            margin: 15px auto;
+            border-radius: 5px;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 30px 0;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            margin-bottom: 50px;
+            position: relative;
+            width: 50%;
+            padding-right: 30px;
+            clear: both;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 30px;
+            padding-right: 0;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: perspective(1000px) rotateY(5deg);
+            transition: all 0.5s ease;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            transform: perspective(1000px) rotateY(-5deg);
+        }
+        
+        .timeline-content:hover {
+            transform: perspective(1000px) rotateY(0deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+        
+        .timeline-date {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        /* Team Section */
+        .team-member {
+            text-align: center;
+            margin-bottom: 30px;
+            perspective: 1000px;
+        }
+        
+        .team-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: rotateY(0deg);
+            transition: all 0.5s ease;
+        }
+        
+        .team-member:hover .team-img {
+            transform: rotateY(20deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Stats */
+        .stat-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            transform: translateZ(0);
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px) translateZ(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 70px 0 30px;
+            margin-top: 80px;
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .timeline:before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+                padding-left: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    {% include 'header.html' %}
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1>About RailBook</h1>
+            <p>India's leading railway booking platform, making travel accessible and convenient for millions of passengers since 2010.</p>
+        </div>
+    </section>
+
+    <!-- About Content -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h2 class="section-title">Our Story</h2>
+                    <p class="lead">Founded in 2010, RailBook started with a simple mission: to make train travel booking effortless and accessible to everyone across India.</p>
+                    <p>What began as a small startup in Mumbai has now grown into one of India's most trusted railway booking platforms, serving over 5 million customers annually.</p>
+                    <p>Our journey has been fueled by innovation, customer-centric approach, and a passion for simplifying travel. We continuously evolve our platform to meet the changing needs of modern travelers.</p>
+                    <div class="mt-4">
+                        <a href="#" class="btn btn-primary btn-lg me-3">Our Services</a>
+                        <a href="#" class="btn btn-outline-primary btn-lg">Contact Us</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="rotate-3d">
+                        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                             alt="RailBook Team" class="img-fluid rounded-3 shadow-lg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Our Achievements</h2>
+            <div class="row">
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item fade-in">
+                        <div class="stat-number">5M+</div>
+                        <div class="stat-label">Happy Customers</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item fade-in">
+                        <div class="stat-number">15K+</div>
+                        <div class="stat-label">Daily Bookings</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item fade-in">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Routes Covered</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-4">
+                    <div class="stat-item fade-in">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title">Our Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content card-3d">
+                        <div class="timeline-date">2010</div>
+                        <h4>Foundation</h4>
+                        <p>RailBook was founded with a vision to revolutionize train ticket booking in India.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content card-3d">
+                        <div class="timeline-date">2013</div>
+                        <h4>1 Million Users</h4>
+                        <p>We reached our first million users, a significant milestone in our journey.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content card-3d">
+                        <div class="timeline-date">2016</div>
+                        <h4>Mobile App Launch</h4>
+                        <p>Launched our mobile application for iOS and Android platforms.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content card-3d">
+                        <div class="timeline-date">2020</div>
+                        <h4>5 Million Users</h4>
+                        <p>Celebrated serving 5 million customers across India.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content card-3d">
+                        <div class="timeline-date">2023</div>
+                        <h4>AI Integration</h4>
+                        <p>Integrated AI-powered features for personalized travel recommendations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">Our Leadership</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                             alt="Team Member" class="team-img mb-3">
+                        <h4>Rajesh Kumar</h4>
+                        <p class="text-primary">Founder & CEO</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" 
+                             alt="Team Member" class="team-img mb-3">
+                        <h4>Priya Sharma</h4>
+                        <p class="text-primary">Chief Technology Officer</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                             alt="Team Member" class="team-img mb-3">
+                        <h4>Vikram Singh</h4>
+                        <p class="text-primary">Head of Operations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="card-3d h-100">
+                        <div class="card-body p-5">
+                            <h3 class="card-title mb-4">Our Mission</h3>
+                            <p class="card-text">To make train travel booking seamless, accessible, and convenient for every Indian, leveraging technology to enhance the travel experience.</p>
+                            <p class="card-text">We strive to eliminate the complexities of railway reservations and provide a platform that is intuitive, reliable, and efficient.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card-3d h-100">
+                        <div class="card-body p-5">
+                            <h3 class="card-title mb-4">Our Vision</h3>
+                            <p class="card-text">To become India's most trusted travel platform, revolutionizing how people plan, book, and experience train journeys across the country.</p>
+                            <p class="card-text">We envision a future where travel planning is effortless, and every journey is a delightful experience from start to finish.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <script>
+        // Animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOptions = {
+                threshold: 0.3,
+                rootMargin: "0px 0px -100px 0px"
+            };
+            
+            const fadeInObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, fadeInOptions);
+            
+            fadeElements.forEach(element => {
+                fadeInObserver.observe(element);
+            });
+            
+            // Floating animation for elements
+            const floatingElements = document.querySelectorAll('.floating');
+            floatingElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.3}s`;
+            });
+        });
+    </script>
+</body>
+</html>

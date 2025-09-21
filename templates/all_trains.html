@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Trains - Railway Booking System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #0d47a1;
+            --accent: #ff6f00;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .search-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+        
+        .train-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+            height: 450px; /* Fixed height for consistent card size */
+        }
+        
+        .train-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .train-image {
+            height: 180px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .train-details {
+            padding: 20px;
+            height: calc(100% - 180px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .train-number {
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .train-route {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--dark);
+        }
+        
+        .train-timing {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .train-price {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+        
+        .train-seats {
+            font-size: 0.9rem;
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .offer-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(255, 111, 0, 0.3);
+        }
+        
+        .no-trains {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .search-input {
+            border: none;
+            border-radius: 25px;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .filter-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-badge:hover, .filter-badge.active {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .stats-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .search-group {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-group h5 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .clear-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .clear-btn:hover {
+            background: #e65100;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    {% include 'header.html' %}
+
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto text-center">
+                    <h2 class="mb-4">Explore All Available Trains</h2>
+                    <p class="lead mb-4">Find your perfect train with advanced search and filtering</p>
+                    
+                    <div class="row">
+                        <!-- Source and Destination Search -->
+                        <div class="col-lg-6">
+                            <div class="search-group">
+                                <h5><i class="fas fa-route me-2"></i>Search by Route</h5>
+                                <input type="text" id="sourceInput" class="form-control search-input" placeholder="Enter source station...">
+                                <input type="text" id="destinationInput" class="form-control search-input" placeholder="Enter destination station...">
+                            </div>
+                        </div>
+                        
+                        <!-- Train Name Search -->
+                        <div class="col-lg-6">
+                            <div class="search-group">
+                                <h5><i class="fas fa-train me-2"></i>Search by Train</h5>
+                                <input type="text" id="trainNameInput" class="form-control search-input" placeholder="Enter train name or number...">
+                                <button class="btn clear-btn w-100" onclick="clearAllFilters()">
+                                    <i class="fas fa-times me-2"></i>Clear All Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Filters -->
+                    <div class="mt-4">
+                        <div class="d-flex flex-wrap justify-content-center">
+                            <span class="filter-badge" data-filter="rajdhani">Rajdhani Express</span>
+                            <span class="filter-badge" data-filter="shatabdi">Shatabdi Express</span>
+                            <span class="filter-badge" data-filter="duronto">Duronto Express</span>
+                            <span class="filter-badge" data-filter="garib">Garib Rath</span>
+                            <span class="filter-badge" data-filter="available">Available Seats</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="totalTrains">{{ trains|length }}</div>
+                    <div class="stats-label">Total Trains</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="availableTrains">0</div>
+                    <div class="stats-label">Available Now</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="popularRoute">0</div>
+                    <div class="stats-label">Popular Routes</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="stats-number" id="avgFare">0</div>
+                    <div class="stats-label">Avg Fare</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Trains Section -->
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="mb-4">All Available Trains</h3>
+                <p class="text-muted mb-4" id="resultsCount">Showing {{ trains|length }} trains</p>
+                
+                <div id="trainsContainer" class="row">
+                    {% if trains and trains|length > 0 %}
+                        {% for train in trains %}
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="train-card" data-train="{{ train.train_name|lower }} {{ train.train_number|lower }} {{ train.source_station|lower }} {{ train.destination_station|lower }}">
+                                <div class="position-relative">
+                                    <!-- Train images - using actual train images -->
+                                    
+                                    <img src="https://images.unsplash.com/photo-1474487548417-781cb71495f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="train-image" alt="{{ train.train_name }}">
+                                    
+                                    <!-- Availability badge -->
+                                    {% if train.available_seats > 200 %}
+                                    <div class="offer-badge">Available</div>
+                                    {% elif train.available_seats > 100 %}
+                                    <div class="offer-badge">Limited</div>
+                                    {% else %}
+                                    <div class="offer-badge">Few Left</div>
+                                    {% endif %}
+                                </div>
+                                <div class="train-details">
+                                    <div>
+                                        <div class="train-number">{{ train.train_number }} | {{ train.train_name }}</div>
+                                        <div class="train-route">{{ train.source_station }} to {{ train.destination_station }}</div>
+                                        <div class="train-timing">
+                                            <div><i class="far fa-clock me-1"></i> Depart: {{ train.departure_time }} | Arrive: {{ train.arrival_time }}</div>
+                                            <div><i class="fas fa-bolt me-1"></i> Duration: {{ train.duration }}</div>
+                                            <div><i class="fas fa-chair me-1"></i> Available Seats: {{ train.available_seats }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div>
+                                            <div class="train-price">₹{{ train.fare }}</div>
+                                            <div class="train-seats">{{ train.available_seats }} seats available</div>
+                                        </div>
+                                        {% if session.user_id %}
+                                        <a href="{{ url_for('book_ticket', train_id=train.id) }}" class="btn btn-primary">
+                                            <i class="fas fa-ticket-alt me-2"></i>Book Now
+                                        </a>
+                                        {% else %}
+                                        <a href="{{ url_for('login') }}" class="btn btn-primary">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login to Book
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="no-trains">
+                                <i class="fas fa-train fa-3x text-muted mb-3"></i>
+                                <h4>No trains available at the moment</h4>
+                                <p class="text-muted">Please check back later or contact support for more information.</p>
+                                <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+                                    <i class="fas fa-home me-2"></i>Back to Home
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Railway Booking System</h5>
+                    <p>Simple and efficient train ticket booking platform</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>© 2023 Railway Booking System. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Enhanced Search JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sourceInput = document.getElementById('sourceInput');
+            const destinationInput = document.getElementById('destinationInput');
+            const trainNameInput = document.getElementById('trainNameInput');
+            const trainsContainer = document.getElementById('trainsContainer');
+            const trainCards = trainsContainer.querySelectorAll('.train-card');
+            const resultsCount = document.getElementById('resultsCount');
+            const filterBadges = document.querySelectorAll('.filter-badge');
+            
+            // Calculate stats
+            function calculateStats() {
+                const availableTrains = Array.from(trainCards).filter(card => 
+                    parseInt(card.querySelector('.train-seats').textContent) > 0
+                ).length;
+                
+                const totalFare = Array.from(trainCards).reduce((sum, card) => {
+                    const fare = parseInt(card.querySelector('.train-price').textContent.replace('₹', ''));
+                    return sum + fare;
+                }, 0);
+                
+                const avgFare = totalFare / trainCards.length;
+                
+                document.getElementById('availableTrains').textContent = availableTrains;
+                document.getElementById('avgFare').textContent = '₹' + Math.round(avgFare);
+                document.getElementById('popularRoute').textContent = Math.floor(trainCards.length / 3);
+            }
+            
+            calculateStats();
+            
+            // Enhanced search functionality
+            function performSearch() {
+                const sourceValue = sourceInput.value.toLowerCase().trim();
+                const destinationValue = destinationInput.value.toLowerCase().trim();
+                const trainNameValue = trainNameInput.value.toLowerCase().trim();
+                let visibleCount = 0;
+                
+                trainCards.forEach(card => {
+                    const trainData = card.getAttribute('data-train');
+                    const cardParent = card.closest('.col-lg-4');
+                    
+                    let showCard = true;
+                    
+                    // Check source filter
+                    if (sourceValue && !trainData.includes(sourceValue)) {
+                        showCard = false;
+                    }
+                    
+                    // Check destination filter
+                    if (destinationValue && !trainData.includes(destinationValue)) {
+                        showCard = false;
+                    }
+                    
+                    // Check train name filter
+                    if (trainNameValue && !trainData.includes(trainNameValue)) {
+                        showCard = false;
+                    }
+                    
+                    if (showCard) {
+                        cardParent.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        cardParent.style.display = 'none';
+                    }
+                });
+                
+                resultsCount.textContent = `Showing ${visibleCount} trains`;
+                
+                // Show no results message if no trains found
+                if (visibleCount === 0) {
+                    if (!document.getElementById('noResults')) {
+                        const noResults = document.createElement('div');
+                        noResults.id = 'noResults';
+                        noResults.className = 'col-12';
+                        noResults.innerHTML = `
+                            <div class="no-trains">
+                                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                                <h4>No trains found</h4>
+                                <p class="text-muted">Try different search terms or check the spelling.</p>
+                            </div>
+                        `;
+                        trainsContainer.appendChild(noResults);
+                    }
+                } else {
+                    const noResults = document.getElementById('noResults');
+                    if (noResults) {
+                        noResults.remove();
+                    }
+                }
+            }
+            
+            // Add event listeners to all search inputs
+            sourceInput.addEventListener('input', performSearch);
+            destinationInput.addEventListener('input', performSearch);
+            trainNameInput.addEventListener('input', performSearch);
+            
+            // Filter functionality
+            filterBadges.forEach(badge => {
+                badge.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    applyFilters();
+                });
+            });
+            
+            function applyFilters() {
+                const activeFilters = Array.from(filterBadges)
+                    .filter(badge => badge.classList.contains('active'))
+                    .map(badge => badge.getAttribute('data-filter'));
+                
+                let visibleCount = 0;
+                
+                trainCards.forEach(card => {
+                    const cardParent = card.closest('.col-lg-4');
+                    let shouldShow = activeFilters.length === 0;
+                    
+                    activeFilters.forEach(filter => {
+                        const trainData = card.getAttribute('data-train');
+                        const availableSeats = parseInt(card.querySelector('.train-seats').textContent);
+                        
+                        if (filter === 'available' && availableSeats > 0) {
+                            shouldShow = true;
+                        } else if (trainData.includes(filter)) {
+                            shouldShow = true;
+                        }
+                    });
+                    
+                    if (shouldShow) {
+                        cardParent.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        cardParent.style.display = 'none';
+                    }
+                });
+                
+                resultsCount.textContent = `Showing ${visibleCount} trains`;
+                
+                // Perform search after applying filters
+                performSearch();
+            }
+            
+            // Focus first search input on load
+            sourceInput.focus();
+        });
+        
+        // Clear all filters function
+        function clearAllFilters() {
+            document.getElementById('sourceInput').value = '';
+            document.getElementById('destinationInput').value = '';
+            document.getElementById('trainNameInput').value = '';
+            
+            // Clear active filter badges
+            document.querySelectorAll('.filter-badge.active').forEach(badge => {
+                badge.classList.remove('active');
+            });
+            
+            // Show all trains
+            document.querySelectorAll('.col-lg-4').forEach(card => {
+                card.style.display = 'block';
+            });
+            
+            // Remove no results message if exists
+            const noResults = document.getElementById('noResults');
+            if (noResults) {
+                noResults.remove();
+            }
+            
+            // Update results count
+            const totalTrains = document.querySelectorAll('.train-card').length;
+            document.getElementById('resultsCount').textContent = `Showing ${totalTrains} trains`;
+            
+            // Focus first input
+            document.getElementById('sourceInput').focus();
+        }
+    </script>
+</body>
+</html>
