@@ -699,6 +699,3 @@ def all_trains():
     
     return render_template('all_trains.html', trains=trains)
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
